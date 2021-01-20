@@ -11394,3 +11394,7 @@ span.page-link{
 .react-bootstrap-table-page-btns-ul{
   float: right;
 }
+.wh-150{
+  width: 150px;
+  height: 150px;
+}
