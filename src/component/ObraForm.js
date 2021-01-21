@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import { Link, useHistory } from 'react-router-dom';
 import useQuery from '../hook/useQuery';
 import * as Yup from 'yup';
-import Get from '../service/Get';
 import { CATEGORIA_ALL, OBRA_GET, OBRA_SAVE, SOPORTE_ALL, TECNICA_ALL, TEMATICA_ALL } from '../service/Route';
 import { toast } from 'react-toastify';
 import { MSG_ERROR,MSG_SUCCESS,MSG_ERROR_PROCESS_DATA } from '../service/Messages';
@@ -42,22 +41,24 @@ export default function ObraForm({auth}){
             urls.push(`${OBRA_GET}/${query.get('id')}`)
             GetAll({urls: urls, access_token: auth.data.access_token})
             .then(response=>{
-                console.log(response)
+                //console.log(response)
                 setCategoriaOpt(response[0].data)
                 setSoporteOpt(response[1].data)
                 setTecnicaOpt(response[2].data)
                 setTematicaOpt(response[3].data)
-                // const obj = {
-                //     id: response.data.data.id,
-                //     name: response.data.data.name,
-                //     width: response.data.data.width,
-                //     height: response.data.data.height,
-                //     soporte: response.data.data.soporte,
-                //     categoria: response.data.data.categoria,
-                //     tecnica: response.data.data.tecnica,
-                //     tematica: response.data.data.tematica
-                // }
-                // setInitialValue(obj)
+                const obj = {
+                    id: response[4].data.data.id,
+                    name: response[4].data.data.name,
+                    width: response[4].data.data.width,
+                    height: response[4].data.data.height,
+                    soporte: response[4].data.data.soporte_id,
+                    categoria: response[4].data.data.categoria_id,
+                    tecnica: response[4].data.data.tecnica_id,
+                    tematica: response[4].data.data.tematica_id,
+                    image: response[4].data.data.image
+                }
+                setImg(response[4].data.data.image)
+                setInitialValue(obj)
                 setLoading(false)
             })
             .catch(error=>{
@@ -93,7 +94,7 @@ export default function ObraForm({auth}){
             .required("Campo requerido"),
         tematica: Yup.string()
             .required("Campo requerido"),
-        image: Yup.string()
+        image: Yup.string()            
             .required("Campo requerido"),
     });
 
@@ -105,9 +106,11 @@ export default function ObraForm({auth}){
                     initialValues={initialValue}
                     validationSchema={schemaValidate}
                     onSubmit={(values, { setSubmitting, setFieldValue, resetForm }) => {      
-                        console.log(values)         
+                        //console.log(values)         
                         const formData = new FormData();
-                        formData.append("file", values.image)
+                        if(values.image.name){
+                            formData.append("file", values.image)
+                        }                        
                         formData.append("id", values.id)
                         formData.append("name", values.name)
                         formData.append("width", values.width)
@@ -259,7 +262,7 @@ export default function ObraForm({auth}){
                                 <Col xs="3" lg="4">
                                     <div className="wh-150">
                                         {
-                                            values.image ?  <Image src={values.image} fluid /> :
+                                            values.image ?  <Image src={img} fluid className="h-150"/> :
                                             <Image src={defaultImage} fluid />
                                         }
                                         

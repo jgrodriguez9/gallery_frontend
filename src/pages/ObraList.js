@@ -87,6 +87,26 @@ export default function ObraList({url, auth}){
         text: 'Nombre'
       },
       {
+        dataField: 'categoria.name',
+        text: 'Categoría',
+        headerStyle: { width: '12%' },
+      },
+      {
+        dataField: 'soporte.name',
+        text: 'Soporte',
+        headerStyle: { width: '12%' },
+      },
+      {
+        dataField: 'tecnica.name',
+        text: 'Técnica',
+        headerStyle: { width: '12%' },
+      },
+      {
+        dataField: 'tematica.name',
+        text: 'Temática',
+        headerStyle: { width: '12%' },
+      },
+      {
         dataField: '',
         isDummyField: true,
         text: '',
